@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.UrlTextBox = new System.Windows.Forms.TextBox();
             this.StartParsingButton = new System.Windows.Forms.Button();
             this.ResponseDataGridView = new System.Windows.Forms.DataGridView();
@@ -41,6 +42,7 @@
             this.AHREF_Inner = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AHREF_Outer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SaveDataButton = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.ResponseDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -146,6 +148,10 @@
             this.SaveDataButton.Text = "Save Data";
             this.SaveDataButton.UseVisualStyleBackColor = true;
             // 
+            // toolTip1
+            // 
+            this.toolTip1.Tag = "fff";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -178,6 +184,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn AHREF_Inner;
         private System.Windows.Forms.DataGridViewTextBoxColumn AHREF_Outer;
         private System.Windows.Forms.Button SaveDataButton;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 

@@ -16,10 +16,12 @@ namespace NetpeakWebParser
         [STAThread]
         static void Main()
         {
-           DBWebPageInitializator db = new DBWebPageInitializator();
-           db.InitializeDatabase(new WebPageContext());
+             DBWebPageInitializator db = new DBWebPageInitializator();
+              db.InitializeDatabase(new WebPageContext());
 
-          //  Database.SetInitializer(new DBWebPageInitializator());
+            //  Database.SetInitializer(new DBWebPageInitializator());
+
+          //  Database.SetInitializer<WebPageContext>(null);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

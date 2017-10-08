@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace NetpeakWebParser.Model
 {
-    public class DBWebPageInitializator :  DropCreateDatabaseAlways<WebPageContext>// CreateDatabaseIfNotExists<WebPageContext>
+    public class DBWebPageInitializator : CreateDatabaseIfNotExists<WebPageContext>//DropCreateDatabaseAlways<WebPageContext>// CreateDatabaseIfNotExists<WebPageContext>
     {
         protected override void Seed(WebPageContext context)
         {
@@ -26,10 +26,10 @@ namespace NetpeakWebParser.Model
                 Description = "Some desc there",
                 ResponseCode = 200,
                 ResponseTime = TimeSpan.FromSeconds(0.23).TotalMilliseconds + " ms",
-                Header = header,
-                Image = image,
-                HrefInner = innerLink,
-                HrefOuter = outerLink
+                //Header = header
+                //Image = image,
+             //   HrefInner = innerLink,
+             //   HrefOuter = outerLink
             });
 
             context.SaveChanges();

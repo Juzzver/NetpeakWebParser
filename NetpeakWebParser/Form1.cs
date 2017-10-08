@@ -23,14 +23,12 @@ namespace NetpeakWebParser
             InitializeComponent();
 
             db = new WebPageContext();
-            db.WebPages.Load();
-
-           
+            db.WebPages.Load();           
         }
 
         private async void StartParsingButton_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Stopwatch timer = new Stopwatch();
+            Stopwatch timer = new Stopwatch();
             timer.Start();
 
             var url = GetUrl();
@@ -56,14 +54,28 @@ namespace NetpeakWebParser
             page.Description = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='description']")?.Attributes["content"].Value;
             page.ResponseCode = (int)response.StatusCode;
             page.ResponseTime = timeTaken.TotalMilliseconds.ToString("#") + " ms";
+            page.HeadersList = new List<Header>();
 
+           var headers = htmlDoc.DocumentNode.SelectNodes("//h1");
+
+            if (headers != null)
+            {
+                foreach (var header in headers)
+                {
+                    page.HeadersList.Add(new Header() { Text = header.InnerText });
+                }
+            }
 
             ResponseDataGridView.Rows[0].Cells["Url"].Value = url;
             ResponseDataGridView.Rows[0].Cells["Title"].Value = page.Title;
             ResponseDataGridView.Rows[0].Cells["Description"].Value = page.Description;
             ResponseDataGridView.Rows[0].Cells["ResponseCode"].Value = page.ResponseCode;
             ResponseDataGridView.Rows[0].Cells["ResponseTime"].Value = page.ResponseTime;
+            ResponseDataGridView.Rows[0].Cells["Header_h1"].Value = page.HeadersList.Count;
 
+            for (int i = 0; i< page.HeadersList.Count; i++)
+                ResponseDataGridView.Rows[0].Cells["Header_h1"].ToolTipText += $"[{i}] {((List<Header>)page.HeadersList)[i].Text}\n";
+            
         }
 
         private string GetUrl()
