@@ -1,5 +1,7 @@
-﻿using System;
+﻿using NetpeakWebParser.Model;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,6 +16,11 @@ namespace NetpeakWebParser
         [STAThread]
         static void Main()
         {
+           // DBWebPageInitializator db = new DBWebPageInitializator();
+           // db.InitializeDatabase(new WebPageContext());
+
+          //  Database.SetInitializer(new DBWebPageInitializator());
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm());
