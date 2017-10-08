@@ -60,10 +60,10 @@
             this.StartParsingButton.TabIndex = 1;
             this.StartParsingButton.Text = "Start Parsing";
             this.StartParsingButton.UseVisualStyleBackColor = true;
+            this.StartParsingButton.Click += new System.EventHandler(this.StartParsingButton_Click);
             // 
             // dataGridView1
             // 
-            this.dataGridView1.AllowUserToAddRows = false;
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {

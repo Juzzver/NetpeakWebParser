@@ -33,6 +33,7 @@ namespace NetpeakWebParser.Model
             });
 
             context.SaveChanges();
+
             base.Seed(context);
         }
     }
