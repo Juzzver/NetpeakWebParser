@@ -28,13 +28,15 @@ namespace NetpeakWebParser
 
         private async void StartParsingButton_Click(object sender, EventArgs e)
         {
-            Stopwatch timer = new Stopwatch();
-            timer.Start();
-
             var url = GetUrl();
 
             if (url == null)
                 return;
+
+            ClearOldTips(ResponseDataGridView);
+
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
 
             var request = CreateWebRequest(url, "GET");
             var getResponse = await request.GetResponseAsync();
@@ -55,8 +57,11 @@ namespace NetpeakWebParser
             page.ResponseCode = (int)response.StatusCode;
             page.ResponseTime = timeTaken.TotalMilliseconds.ToString("#") + " ms";
             page.HeadersList = new List<Header>();
+            page.ImagesList = new List<Image>();
+            page.InnerLinksList = new List<HrefInner>();
+            page.OuterLinksList = new List<HrefOuter>();
 
-           var headers = htmlDoc.DocumentNode.SelectNodes("//h1");
+            var headers = htmlDoc.DocumentNode.SelectNodes("//h1");
 
             if (headers != null)
             {
@@ -66,16 +71,75 @@ namespace NetpeakWebParser
                 }
             }
 
-            ResponseDataGridView.Rows[0].Cells["Url"].Value = url;
+            var images = htmlDoc.DocumentNode.SelectNodes("//img");
+
+            if (images != null)
+            {
+                foreach (var img in images)
+                {
+                    if (img.Attributes["src"] != null && img.Attributes["src"].Value != null)
+                    {
+                        page.ImagesList.Add(new Image() { Src = img.Attributes["src"].Value });
+                    }
+                }
+            }
+
+            var links = htmlDoc.DocumentNode.SelectNodes("//a");
+
+            if (links != null)
+            {
+                foreach (var href in links)
+                {
+                    if (href.Attributes["href"] != null && href.Attributes["href"].Value != null)
+                    {
+                        if (href.Attributes["href"].Value.Contains(page.Url))
+                        {
+                            page.InnerLinksList.Add(new HrefInner()
+                            {
+                                Link = href.Attributes["href"].Value,
+                                Text = href.InnerText
+                            });
+                        }
+                        else
+                        {
+                            page.OuterLinksList.Add(new HrefOuter()
+                            {
+                                Link = href.Attributes["href"].Value,
+                                Text = href.InnerText
+                            });
+                        }
+                    }
+                }
+            }
+
+            ResponseDataGridView.Rows[0].Cells["Url"].Value = page.Url;
             ResponseDataGridView.Rows[0].Cells["Title"].Value = page.Title;
             ResponseDataGridView.Rows[0].Cells["Description"].Value = page.Description;
             ResponseDataGridView.Rows[0].Cells["ResponseCode"].Value = page.ResponseCode;
             ResponseDataGridView.Rows[0].Cells["ResponseTime"].Value = page.ResponseTime;
             ResponseDataGridView.Rows[0].Cells["Header_h1"].Value = page.HeadersList.Count;
+            ResponseDataGridView.Rows[0].Cells["Image"].Value = page.ImagesList.Count;
+            ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].Value = page.InnerLinksList.Count;
+            ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].Value = page.OuterLinksList.Count;
 
-            for (int i = 0; i< page.HeadersList.Count; i++)
+            for (int i = 0; i < page.HeadersList.Count; i++)
                 ResponseDataGridView.Rows[0].Cells["Header_h1"].ToolTipText += $"[{i}] {((List<Header>)page.HeadersList)[i].Text}\n";
-            
+            for (int i = 0; i < page.ImagesList.Count; i++)
+                ResponseDataGridView.Rows[0].Cells["Image"].ToolTipText += $"[{i}] {((List<Image>)page.ImagesList)[i].Src}\n";
+            for (int i = 0; i < page.InnerLinksList.Count; i++)
+                ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].ToolTipText +=
+                    $"[{i}] [{((List<HrefInner>)page.InnerLinksList)[i].Link}] [{((List<HrefInner>)page.InnerLinksList)[i].Text}] \n";
+
+            for (int i = 0; i < page.OuterLinksList.Count; i++)
+                ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].ToolTipText +=
+                    $"[{i}] [{((List<HrefOuter>)page.OuterLinksList)[i].Link}] [{((List<HrefOuter>)page.OuterLinksList)[i].Text}] \n";
+                                              
+        }
+
+        private void ClearOldTips(Control control)
+        {
+           // ToDo;
+
         }
 
         private string GetUrl()

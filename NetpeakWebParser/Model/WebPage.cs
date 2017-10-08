@@ -17,18 +17,11 @@ namespace NetpeakWebParser
         public string Description { get; set; }
         public int ResponseCode { get; set; }
         public string ResponseTime { get; set; }
-  //      [ForeignKey("Header")]
-    //    public int HeaderId { get; set; }
-  /*      public int ImageId { get; set; }
-        public int HrefInnedId { get; set; }
-        public int HrefOuterId { get; set; }*/
 
-    //    public virtual Header Header { get; set; }
-     /*   public virtual Image Image { get; set; }
-        public virtual HrefInner HrefInner { get; set; }
-        public virtual HrefOuter HrefOuter { get; set; }*/
-
-       public ICollection<Header> HeadersList { get; set; } 
+        public ICollection<Header> HeadersList { get; set; }
+        public ICollection<Image> ImagesList { get; set; }
+        public ICollection<HrefInner> InnerLinksList { get; set; }
+        public ICollection<HrefOuter> OuterLinksList { get; set; }
     }
 
     public class Header
@@ -47,6 +40,10 @@ namespace NetpeakWebParser
         public int Id { get; set; }
         public string Src { get; set; }
 
+        [ForeignKey("WebPage")]
+        public int WebPageId { get; set; }
+        public virtual WebPage WebPage { get; set; }
+
     }
 
     public class HrefInner
@@ -54,6 +51,10 @@ namespace NetpeakWebParser
         public int Id { get; set; }
         public string Link { get; set; }
         public string Text { get; set; }
+
+        [ForeignKey("WebPage")]
+        public int WebPageId { get; set; }
+        public virtual WebPage WebPage { get; set; }
     }
 
     public class HrefOuter
@@ -61,6 +62,10 @@ namespace NetpeakWebParser
         public int Id { get; set; }
         public string Link { get; set; }
         public string Text { get; set; }
+
+        [ForeignKey("WebPage")]
+        public int WebPageId { get; set; }
+        public virtual WebPage WebPage { get; set; }
 
     }
 
