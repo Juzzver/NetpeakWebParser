@@ -30,7 +30,7 @@
         {
             this.UrlTextBox = new System.Windows.Forms.TextBox();
             this.StartParsingButton = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.ResponseDataGridView = new System.Windows.Forms.DataGridView();
             this.Url = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -41,7 +41,7 @@
             this.AHREF_Inner = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AHREF_Outer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SaveDataButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ResponseDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // UrlTextBox
@@ -51,6 +51,7 @@
             this.UrlTextBox.Size = new System.Drawing.Size(769, 20);
             this.UrlTextBox.TabIndex = 0;
             this.UrlTextBox.Text = "http://ya.ru";
+            this.UrlTextBox.TextChanged += new System.EventHandler(this.UrlTextBox_TextChanged);
             // 
             // StartParsingButton
             // 
@@ -62,11 +63,11 @@
             this.StartParsingButton.UseVisualStyleBackColor = true;
             this.StartParsingButton.Click += new System.EventHandler(this.StartParsingButton_Click);
             // 
-            // dataGridView1
+            // ResponseDataGridView
             // 
-            this.dataGridView1.AllowUserToDeleteRows = false;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ResponseDataGridView.AllowUserToDeleteRows = false;
+            this.ResponseDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ResponseDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Url,
             this.Title,
             this.Description,
@@ -76,11 +77,11 @@
             this.Image,
             this.AHREF_Inner,
             this.AHREF_Outer});
-            this.dataGridView1.Location = new System.Drawing.Point(12, 38);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.Size = new System.Drawing.Size(850, 150);
-            this.dataGridView1.TabIndex = 3;
+            this.ResponseDataGridView.Location = new System.Drawing.Point(12, 38);
+            this.ResponseDataGridView.Name = "ResponseDataGridView";
+            this.ResponseDataGridView.ReadOnly = true;
+            this.ResponseDataGridView.Size = new System.Drawing.Size(850, 150);
+            this.ResponseDataGridView.TabIndex = 3;
             // 
             // Url
             // 
@@ -151,12 +152,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(874, 341);
             this.Controls.Add(this.SaveDataButton);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.ResponseDataGridView);
             this.Controls.Add(this.StartParsingButton);
             this.Controls.Add(this.UrlTextBox);
             this.Name = "MainForm";
             this.Text = "Netpeak Web Parser";
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ResponseDataGridView)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -166,7 +167,7 @@
 
         private System.Windows.Forms.TextBox UrlTextBox;
         private System.Windows.Forms.Button StartParsingButton;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView ResponseDataGridView;
         private System.Windows.Forms.DataGridViewTextBoxColumn Url;
         private System.Windows.Forms.DataGridViewTextBoxColumn Title;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;

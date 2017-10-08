@@ -25,7 +25,7 @@ namespace NetpeakWebParser.Model
                 Title = "My website",
                 Description = "Some desc there",
                 ResponseCode = 200,
-                ResponseTime = TimeSpan.FromSeconds(0.23),
+                ResponseTime = TimeSpan.FromSeconds(0.23).TotalMilliseconds + " ms",
                 Header = header,
                 Image = image,
                 HrefInner = innerLink,

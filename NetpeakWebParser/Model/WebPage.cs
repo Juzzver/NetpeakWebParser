@@ -10,10 +10,11 @@ namespace NetpeakWebParser
     public class WebPage
     {
         public int Id { get; set; }
+        public string Url { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int ResponseCode { get; set; }
-        public TimeSpan ResponseTime { get; set; }
+        public string ResponseTime { get; set; }
 
         public int HeaderId { get; set; }
         public int ImageId { get; set; }
