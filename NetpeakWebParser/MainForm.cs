@@ -115,13 +115,13 @@ namespace NetpeakWebParser
             ResponseDataGridView.Rows[0].Cells["Url"].Value = page.Url;
             ResponseDataGridView.Rows[0].Cells["Title"].Value = page.Title;
             ResponseDataGridView.Rows[0].Cells["Description"].Value = page.Description;
-            ResponseDataGridView.Rows[0].Cells["ResponseCode"].Value = page.ResponseCode;
+            ResponseDataGridView.Rows[0].Cells["StatusCode"].Value = page.ResponseCode;
             ResponseDataGridView.Rows[0].Cells["ResponseTime"].Value = page.ResponseTime;
-            ResponseDataGridView.Rows[0].Cells["Header_h1"].Value = page.HeadersList.Count;
+            ResponseDataGridView.Rows[0].Cells["h1"].Value = page.HeadersList.Count;
             ResponseDataGridView.Rows[0].Cells["Image"].Value = page.ImagesList.Count;
             ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].Value = page.InnerLinksList.Count;
             ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].Value = page.OuterLinksList.Count;
-
+            
             for (int i = 0; i < page.HeadersList.Count; i++)
                 ResponseDataGridView.Rows[0].Cells["Header_h1"].ToolTipText += $"[{i}] {((List<Header>)page.HeadersList)[i].Text}\n";
             for (int i = 0; i < page.ImagesList.Count; i++)
