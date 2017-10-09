@@ -28,7 +28,7 @@ namespace NetpeakWebParser
 
         private async void StartParsingButton_Click(object sender, EventArgs e)
         {
-            var url = GetUrl();
+            var url = GetUrl(UrlTextBox.Text);
 
             if (url == null)
                 return;
@@ -92,12 +92,13 @@ namespace NetpeakWebParser
                 {
                     if (href.Attributes["href"] != null && href.Attributes["href"].Value != null)
                     {
-                        if (href.Attributes["href"].Value.Contains(page.Url))
+                       
+                        if (href.Attributes["href"].Value.Contains(GetRemovedProtocolUrl(page.Url)))
                         {
                             page.InnerLinksList.Add(new HrefInner()
                             {
                                 Link = href.Attributes["href"].Value,
-                                Text = href.InnerText
+                                Text = href.InnerText.Trim()
                             });
                         }
                         else
@@ -105,8 +106,8 @@ namespace NetpeakWebParser
                             page.OuterLinksList.Add(new HrefOuter()
                             {
                                 Link = href.Attributes["href"].Value,
-                                Text = href.InnerText
-                            });
+                                Text = href.InnerText.Trim()
+                    });
                         }
                     }
                 }
@@ -123,7 +124,7 @@ namespace NetpeakWebParser
             ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].Value = page.OuterLinksList.Count;
             
             for (int i = 0; i < page.HeadersList.Count; i++)
-                ResponseDataGridView.Rows[0].Cells["Header_h1"].ToolTipText += $"[{i}] {((List<Header>)page.HeadersList)[i].Text}\n";
+                ResponseDataGridView.Rows[0].Cells["h1"].ToolTipText += $"[{i}] {((List<Header>)page.HeadersList)[i].Text}\n";
             for (int i = 0; i < page.ImagesList.Count; i++)
                 ResponseDataGridView.Rows[0].Cells["Image"].ToolTipText += $"[{i}] {((List<Image>)page.ImagesList)[i].Src}\n";
             for (int i = 0; i < page.InnerLinksList.Count; i++)
@@ -136,13 +137,26 @@ namespace NetpeakWebParser
                                               
         }
 
+        private string GetRemovedProtocolUrl(string url)
+        {
+            if (url.Contains("http://"))
+                url = url.Replace("http://", "");
+            else if (url.Contains("https://"))
+                url = url.Replace("https://", "");
+
+             if (url.Contains("www."))
+                url = url.Replace("www.", "");
+
+            return url;
+        }
+
         private void ClearOldTips(Control control)
         {
            // ToDo;
 
         }
 
-        private string GetUrl()
+        private string GetUrl(string url)
         {
             if (String.IsNullOrEmpty(UrlTextBox.Text))
             {
@@ -153,8 +167,10 @@ namespace NetpeakWebParser
                 return null;
             }
 
+            if (!url.Contains("http://") && !url.Contains("https://"))
+                url = "http://" + url;
 
-            return UrlTextBox.Text;
+            return url;
         }
 
         private WebRequest CreateWebRequest(string url, string method)
