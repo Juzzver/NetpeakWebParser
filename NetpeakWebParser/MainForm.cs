@@ -152,7 +152,15 @@ namespace NetpeakWebParser
 
         private void ClearOldTips(Control control)
         {
-           // ToDo;
+            var grid = control as DataGridView;
+           if ( grid != null)
+            {
+                for (int i = 0; i < grid.Rows.Count; i++)
+                {
+                    for (int j = 0; j < grid.Rows[i].Cells.Count; j++)
+                        grid.Rows[i].Cells[j].ToolTipText = null;
+                }
+            }
 
         }
 
