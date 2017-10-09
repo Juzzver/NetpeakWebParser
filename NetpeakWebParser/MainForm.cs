@@ -206,5 +206,14 @@ namespace NetpeakWebParser
             if (UrlTextBox.BackColor == Color.PaleVioletRed)
                 UrlTextBox.BackColor = Color.White;
         }
+
+        private void UrlTextBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (int)Keys.Enter)
+            {
+                StartParsingButton.PerformClick();
+                this.Focus();
+            }
+        }
     }
 }

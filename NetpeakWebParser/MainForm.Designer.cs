@@ -32,7 +32,6 @@
             this.UrlTextBox = new System.Windows.Forms.TextBox();
             this.StartParsingButton = new System.Windows.Forms.Button();
             this.ResponseDataGridView = new System.Windows.Forms.DataGridView();
-            this.SaveDataButton = new System.Windows.Forms.Button();
             this.Url = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Title = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -42,6 +41,7 @@
             this.Image = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AHREF_Inner = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AHREF_Outer = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.SaveDataButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ResponseDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,6 +53,7 @@
             this.UrlTextBox.TabIndex = 0;
             this.UrlTextBox.Text = "http://ya.ru";
             this.UrlTextBox.TextChanged += new System.EventHandler(this.UrlTextBox_TextChanged);
+            this.UrlTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.UrlTextBox_KeyPress);
             // 
             // StartParsingButton
             // 
@@ -87,15 +88,6 @@
             this.ResponseDataGridView.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.ResponseDataGridView.Size = new System.Drawing.Size(793, 150);
             this.ResponseDataGridView.TabIndex = 3;
-            // 
-            // SaveDataButton
-            // 
-            this.SaveDataButton.Location = new System.Drawing.Point(380, 194);
-            this.SaveDataButton.Name = "SaveDataButton";
-            this.SaveDataButton.Size = new System.Drawing.Size(75, 23);
-            this.SaveDataButton.TabIndex = 4;
-            this.SaveDataButton.Text = "Save Data";
-            this.SaveDataButton.UseVisualStyleBackColor = true;
             // 
             // Url
             // 
@@ -157,6 +149,15 @@
             this.AHREF_Outer.Name = "AHREF_Outer";
             this.AHREF_Outer.ReadOnly = true;
             this.AHREF_Outer.Width = 80;
+            // 
+            // SaveDataButton
+            // 
+            this.SaveDataButton.Location = new System.Drawing.Point(380, 194);
+            this.SaveDataButton.Name = "SaveDataButton";
+            this.SaveDataButton.Size = new System.Drawing.Size(75, 23);
+            this.SaveDataButton.TabIndex = 4;
+            this.SaveDataButton.Text = "Save Data";
+            this.SaveDataButton.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
