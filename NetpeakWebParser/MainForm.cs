@@ -17,13 +17,14 @@ namespace NetpeakWebParser
     public partial class MainForm : Form
     {
         WebPageContext db;
+        WebPage m_Page;
 
         public MainForm()
         {
             InitializeComponent();
 
             db = new WebPageContext();
-            db.WebPages.Load();           
+            db.WebPages.Load();
         }
 
         private async void StartParsingButton_Click(object sender, EventArgs e)
@@ -49,17 +50,17 @@ namespace NetpeakWebParser
             htmlDoc.Load(response.GetResponseStream(), Encoding.UTF8);
             response.Close();
 
-            WebPage page = new WebPage();
+            m_Page = new WebPage();
 
-            page.Url = url;
-            page.Title = htmlDoc.DocumentNode.SelectSingleNode("//title")?.InnerHtml;
-            page.Description = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='description']")?.Attributes["content"].Value;
-            page.ResponseCode = (int)response.StatusCode;
-            page.ResponseTime = timeTaken.TotalMilliseconds.ToString("#") + " ms";
-            page.HeadersList = new List<Header>();
-            page.ImagesList = new List<Image>();
-            page.InnerLinksList = new List<HrefInner>();
-            page.OuterLinksList = new List<HrefOuter>();
+            m_Page.Url = url;
+            m_Page.Title = htmlDoc.DocumentNode.SelectSingleNode("//title")?.InnerHtml;
+            m_Page.Description = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='description']")?.Attributes["content"].Value;
+            m_Page.ResponseCode = (int)response.StatusCode;
+            m_Page.ResponseTime = timeTaken.TotalMilliseconds.ToString("#") + " ms";
+            m_Page.HeadersList = new List<Header>();
+            m_Page.ImagesList = new List<Image>();
+            m_Page.InnerLinksList = new List<HrefInner>();
+            m_Page.OuterLinksList = new List<HrefOuter>();
 
             var headers = htmlDoc.DocumentNode.SelectNodes("//h1");
 
@@ -67,7 +68,7 @@ namespace NetpeakWebParser
             {
                 foreach (var header in headers)
                 {
-                    page.HeadersList.Add(new Header() { Text = header.InnerText });
+                    m_Page.HeadersList.Add(new Header() { Text = header.InnerText });
                 }
             }
 
@@ -79,7 +80,7 @@ namespace NetpeakWebParser
                 {
                     if (img.Attributes["src"] != null && img.Attributes["src"].Value != null)
                     {
-                        page.ImagesList.Add(new Image() { Src = img.Attributes["src"].Value });
+                        m_Page.ImagesList.Add(new Image() { Src = img.Attributes["src"].Value });
                     }
                 }
             }
@@ -92,10 +93,10 @@ namespace NetpeakWebParser
                 {
                     if (href.Attributes["href"] != null && href.Attributes["href"].Value != null)
                     {
-                       
-                        if (href.Attributes["href"].Value.Contains(GetRemovedProtocolUrl(page.Url)))
+
+                        if (href.Attributes["href"].Value.Contains(GetRemovedProtocolUrl(m_Page.Url)))
                         {
-                            page.InnerLinksList.Add(new HrefInner()
+                            m_Page.InnerLinksList.Add(new HrefInner()
                             {
                                 Link = href.Attributes["href"].Value,
                                 Text = href.InnerText.Trim()
@@ -103,38 +104,39 @@ namespace NetpeakWebParser
                         }
                         else
                         {
-                            page.OuterLinksList.Add(new HrefOuter()
+                            m_Page.OuterLinksList.Add(new HrefOuter()
                             {
                                 Link = href.Attributes["href"].Value,
                                 Text = href.InnerText.Trim()
-                    });
+                            });
                         }
                     }
                 }
             }
 
-            ResponseDataGridView.Rows[0].Cells["Url"].Value = page.Url;
-            ResponseDataGridView.Rows[0].Cells["Title"].Value = page.Title;
-            ResponseDataGridView.Rows[0].Cells["Description"].Value = page.Description;
-            ResponseDataGridView.Rows[0].Cells["StatusCode"].Value = page.ResponseCode;
-            ResponseDataGridView.Rows[0].Cells["ResponseTime"].Value = page.ResponseTime;
-            ResponseDataGridView.Rows[0].Cells["h1"].Value = page.HeadersList.Count;
-            ResponseDataGridView.Rows[0].Cells["Image"].Value = page.ImagesList.Count;
-            ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].Value = page.InnerLinksList.Count;
-            ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].Value = page.OuterLinksList.Count;
-            
-            for (int i = 0; i < page.HeadersList.Count; i++)
-                ResponseDataGridView.Rows[0].Cells["h1"].ToolTipText += $"[{i}] {((List<Header>)page.HeadersList)[i].Text}\n";
-            for (int i = 0; i < page.ImagesList.Count; i++)
-                ResponseDataGridView.Rows[0].Cells["Image"].ToolTipText += $"[{i}] {((List<Image>)page.ImagesList)[i].Src}\n";
-            for (int i = 0; i < page.InnerLinksList.Count; i++)
-                ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].ToolTipText +=
-                    $"[{i}] [{((List<HrefInner>)page.InnerLinksList)[i].Link}] [{((List<HrefInner>)page.InnerLinksList)[i].Text}] \n";
+            ResponseDataGridView.Rows[0].Cells["Url"].Value = m_Page.Url;
+            ResponseDataGridView.Rows[0].Cells["Title"].Value = m_Page.Title;
+            ResponseDataGridView.Rows[0].Cells["Description"].Value = m_Page.Description;
+            ResponseDataGridView.Rows[0].Cells["StatusCode"].Value = m_Page.ResponseCode;
+            ResponseDataGridView.Rows[0].Cells["ResponseTime"].Value = m_Page.ResponseTime;
+            ResponseDataGridView.Rows[0].Cells["h1"].Value = m_Page.HeadersList.Count;
+            ResponseDataGridView.Rows[0].Cells["Image"].Value = m_Page.ImagesList.Count;
+            ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].Value = m_Page.InnerLinksList.Count;
+            ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].Value = m_Page.OuterLinksList.Count;
 
-            for (int i = 0; i < page.OuterLinksList.Count; i++)
+            for (int i = 0; i < m_Page.HeadersList.Count; i++)
+                ResponseDataGridView.Rows[0].Cells["h1"].ToolTipText += $"[{i}] {((List<Header>)m_Page.HeadersList)[i].Text}\n";
+            for (int i = 0; i < m_Page.ImagesList.Count; i++)
+                ResponseDataGridView.Rows[0].Cells["Image"].ToolTipText += $"[{i}] {((List<Image>)m_Page.ImagesList)[i].Src}\n";
+            for (int i = 0; i < m_Page.InnerLinksList.Count; i++)
+                ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].ToolTipText +=
+                    $"[{i}] [{((List<HrefInner>)m_Page.InnerLinksList)[i].Link}] [{((List<HrefInner>)m_Page.InnerLinksList)[i].Text}] \n";
+
+            for (int i = 0; i < m_Page.OuterLinksList.Count; i++)
                 ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].ToolTipText +=
-                    $"[{i}] [{((List<HrefOuter>)page.OuterLinksList)[i].Link}] [{((List<HrefOuter>)page.OuterLinksList)[i].Text}] \n";
-                                              
+                    $"[{i}] [{((List<HrefOuter>)m_Page.OuterLinksList)[i].Link}] [{((List<HrefOuter>)m_Page.OuterLinksList)[i].Text}] \n";
+
+            
         }
 
         private string GetRemovedProtocolUrl(string url)
@@ -144,7 +146,7 @@ namespace NetpeakWebParser
             else if (url.Contains("https://"))
                 url = url.Replace("https://", "");
 
-             if (url.Contains("www."))
+            if (url.Contains("www."))
                 url = url.Replace("www.", "");
 
             return url;
@@ -153,7 +155,8 @@ namespace NetpeakWebParser
         private void ClearOldTips(Control control)
         {
             var grid = control as DataGridView;
-           if ( grid != null)
+
+            if (grid != null)
             {
                 for (int i = 0; i < grid.Rows.Count; i++)
                 {
@@ -214,6 +217,23 @@ namespace NetpeakWebParser
                 StartParsingButton.PerformClick();
                 this.Focus();
             }
+        }
+
+        private void SaveDataButton_Click(object sender, EventArgs e)
+        {
+            DBSaveDataAsync();
+        }
+
+        private async void DBSaveDataAsync()
+        {
+            if (m_Page != null)
+            {
+                db.WebPages.Add(m_Page);
+                await db.SaveChangesAsync();
+                MessageBox.Show("Data saving successfully", "System Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+                MessageBox.Show("No Data for saving!", "Saving Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

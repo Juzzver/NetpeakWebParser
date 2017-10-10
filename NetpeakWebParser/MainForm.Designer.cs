@@ -158,6 +158,7 @@
             this.SaveDataButton.TabIndex = 4;
             this.SaveDataButton.Text = "Save Data";
             this.SaveDataButton.UseVisualStyleBackColor = true;
+            this.SaveDataButton.Click += new System.EventHandler(this.SaveDataButton_Click);
             // 
             // MainForm
             // 
