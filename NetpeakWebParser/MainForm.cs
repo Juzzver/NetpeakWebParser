@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -240,7 +241,7 @@ namespace NetpeakWebParser
                 MessageBox.Show("No Data for saving!", "Saving Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
-        private void LoadDataButton_Click(object sender, EventArgs e)
+        private async void LoadDataButton_Click(object sender, EventArgs e)
         {
             string[] columnNames = new string[ResponseDataGridView.Columns.Count + 1];
 
@@ -248,11 +249,53 @@ namespace NetpeakWebParser
             {
                 columnNames[i] = ResponseDataGridView.Columns[i].Name;
             }
+            /*
+             * SELECT w.Id, w.Url, w.Title, w.Description, w.StatusCode, w.ResponseTime, 
+(select count(*) from Headers h where h.WebPageId = w.Id) as 'h1', 
+(select count(*) from Images i where i.WebPageId = w.Id )as 'Images', 
+(select count(*) from HrefInners hi where hi.WebPageId = w.Id) as 'Inner href', 
+(select count(*) from HrefOuters ho where ho.WebPageId = w.Id ) as 'Outer href' 
+FROM WebPages w*/
 
-            /*  foreach (HtmlElement elem in webBrowser1.Document.Links)
-              {
-                  var link = (elem.DomElement as HTMLAnchorElement).href;
-              }*/
+            string query = @"SELECT w.Id, w.Url, w.Title, w.Description, w.StatusCode, w.ResponseTime, 
+(select count(*) from Headers h where h.WebPageId = w.Id) as 'h1', 
+(select count(*) from Images i where i.WebPageId = w.Id )as 'Images', 
+(select count(*) from HrefInners hi where hi.WebPageId = w.Id) as 'Inner href', 
+(select count(*) from HrefOuters ho where ho.WebPageId = w.Id ) as 'Outer href'
+FROM WebPages w";
+            using (var connection = new SqlConnection(@"Data Source=(localdb)\mssqllocaldb;Initial Catalog=WebPageDB;Integrated Security=True"))
+            {
+                connection.Open();
+                SqlCommand queryCommand = new SqlCommand(query, connection);
+                SqlDataReader queryCommandReader = queryCommand.ExecuteReader();
+           //     var z = await queryCommandReader.r.AsQueryable().ToListAsync();
+
+                // Create a DataTable object to hold all the data returned by the query.
+                DataTable dataTable = new DataTable();
+
+                // Use the DataTable.Load(SqlDataReader) function to put the results of the query into a DataTable.
+                dataTable.Load(queryCommandReader);
+
+                LoadedDataGridView.DataSource = dataTable;
+            }
+
+            LoadedDataGridView.Visible = true;
+            
+
+            // Use the above SqlCommand object to create a SqlDataReader object.
+
+           // queryCommandReader.AsQueryable().ToListAsync();
+
+           
+
+            /* var query = from w in db.WebPages
+                         select new {
+                             w.Id, w.Url, w.Title, w.Description, w.StatusCode, w.ResponseTime,
+                             (from h in db.Headers where h.WebPageId = w.Id select h),
+
+                         };*/
+
+            //   ResponseDataGridView.DataSource = 
 
 
         }
