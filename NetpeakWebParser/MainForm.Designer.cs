@@ -44,6 +44,7 @@
             this.SaveDataButton = new System.Windows.Forms.Button();
             this.LoadDataButton = new System.Windows.Forms.Button();
             this.LoadedDataGridView = new System.Windows.Forms.DataGridView();
+            this.ClearDataButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ResponseDataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LoadedDataGridView)).BeginInit();
             this.SuspendLayout();
@@ -156,7 +157,7 @@
             // 
             // SaveDataButton
             // 
-            this.SaveDataButton.Location = new System.Drawing.Point(312, 194);
+            this.SaveDataButton.Location = new System.Drawing.Point(271, 194);
             this.SaveDataButton.Name = "SaveDataButton";
             this.SaveDataButton.Size = new System.Drawing.Size(75, 23);
             this.SaveDataButton.TabIndex = 4;
@@ -166,7 +167,7 @@
             // 
             // LoadDataButton
             // 
-            this.LoadDataButton.Location = new System.Drawing.Point(393, 194);
+            this.LoadDataButton.Location = new System.Drawing.Point(352, 194);
             this.LoadDataButton.Name = "LoadDataButton";
             this.LoadDataButton.Size = new System.Drawing.Size(75, 23);
             this.LoadDataButton.TabIndex = 5;
@@ -188,6 +189,16 @@
             this.LoadedDataGridView.TabIndex = 6;
             this.LoadedDataGridView.Visible = false;
             // 
+            // ClearDataButton
+            // 
+            this.ClearDataButton.Location = new System.Drawing.Point(433, 194);
+            this.ClearDataButton.Name = "ClearDataButton";
+            this.ClearDataButton.Size = new System.Drawing.Size(75, 23);
+            this.ClearDataButton.TabIndex = 8;
+            this.ClearDataButton.Text = "Clear Data";
+            this.ClearDataButton.UseVisualStyleBackColor = true;
+            this.ClearDataButton.Click += new System.EventHandler(this.ClearDataButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -195,6 +206,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(778, 229);
+            this.Controls.Add(this.ClearDataButton);
             this.Controls.Add(this.LoadedDataGridView);
             this.Controls.Add(this.LoadDataButton);
             this.Controls.Add(this.SaveDataButton);
@@ -227,6 +239,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn AHREF_Outer;
         private System.Windows.Forms.Button LoadDataButton;
         private System.Windows.Forms.DataGridView LoadedDataGridView;
+        private System.Windows.Forms.Button ClearDataButton;
     }
 }
 
