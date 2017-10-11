@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NetpeakWebParser
@@ -112,7 +113,7 @@ namespace NetpeakWebParser
                 }
             }
 
-            ResponseDataGridView.Rows[0].Cells["Url"].Value = m_Page.Url;
+          /*  ResponseDataGridView.Rows[0].Cells["Url"].Value = m_Page.Url;
             ResponseDataGridView.Rows[0].Cells["Title"].Value = m_Page.Title;
             ResponseDataGridView.Rows[0].Cells["Description"].Value = m_Page.Description;
             ResponseDataGridView.Rows[0].Cells["StatusCode"].Value = m_Page.StatusCode;
@@ -120,24 +121,13 @@ namespace NetpeakWebParser
             ResponseDataGridView.Rows[0].Cells["h1"].Value = m_Page.HeadersList.Count;
             ResponseDataGridView.Rows[0].Cells["Image"].Value = m_Page.ImagesList.Count;
             ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].Value = m_Page.InnerLinksList.Count;
-            ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].Value = m_Page.OuterLinksList.Count;
+            ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].Value = m_Page.OuterLinksList.Count;*/
 
-            if (/*String.IsNullOrEmpty(.ToString())*/ ResponseDataGridView.Rows[0].Cells["Description"].Value == null)
+            if (ResponseDataGridView.Rows[0].Cells["Description"].Value == null)
             {
-                ResponseDataGridView.Rows[0].Cells["Description"].Style = new DataGridViewCellStyle() { BackColor = Color.Red };
-                ResponseDataGridView.Rows[0].Cells["Description"].ToolTipText = "Error: Empty description tag";
-
-                ToolTip tip = new ToolTip();
-                tip.IsBalloon = true;
-                tip.ToolTipTitle = "Description Error";
-                tip.ToolTipIcon = ToolTipIcon.Error;
-                tip.Show("Description tag is empty.", this, 224, 26);
-                Timer t = new Timer();
-                t.Interval = 2000;
-                t.Start();
-                t.Tick += delegate { tip.Hide(this); };
+                bool sendError = await SetGridErrorNotice(ResponseDataGridView.Rows[0].Cells, "Description", new Point(224, 26));
             }
-
+            
             for (int i = 0; i < m_Page.HeadersList.Count; i++)
                 ResponseDataGridView.Rows[0].Cells["h1"].ToolTipText += $"[{i}] {((List<Header>)m_Page.HeadersList)[i].Text}\n";
             for (int i = 0; i < m_Page.ImagesList.Count; i++)
@@ -151,6 +141,25 @@ namespace NetpeakWebParser
                     $"[{i}] [{((List<HrefOuter>)m_Page.OuterLinksList)[i].Link}] [{((List<HrefOuter>)m_Page.OuterLinksList)[i].Text}]\n";
 
             
+        }
+
+        private async Task<bool> SetGridErrorNotice(DataGridViewCellCollection cells, string cellName, Point location)
+        {
+            cells[cellName].Style = new DataGridViewCellStyle() { BackColor = Color.Red };
+            cells[cellName].ToolTipText = "Error: Empty description tag";
+
+            ToolTip tip = new ToolTip();
+            tip.IsBalloon = true;
+            tip.ToolTipTitle = "Description Error";
+            tip.ToolTipIcon = ToolTipIcon.Error;
+            tip.Show("Description tag is empty.", this, location);
+
+            Timer t = new Timer();
+            t.Interval = 2000;
+            t.Start();
+            t.Tick += delegate { tip.Hide(this); };
+
+            return true;
         }
 
         private string GetCleanedUrl(string url)
