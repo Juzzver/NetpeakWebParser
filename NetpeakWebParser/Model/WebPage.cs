@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NetpeakWebParser
 {
@@ -15,7 +16,7 @@ namespace NetpeakWebParser
         public string Url { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public int ResponseCode { get; set; }
+        public int StatusCode { get; set; }
         public string ResponseTime { get; set; }
 
         public ICollection<Header> HeadersList { get; set; }
@@ -23,7 +24,7 @@ namespace NetpeakWebParser
         public ICollection<HrefInner> InnerLinksList { get; set; }
         public ICollection<HrefOuter> OuterLinksList { get; set; }
     }
-
+   
     public class Header
     {
         [Key]
@@ -31,7 +32,7 @@ namespace NetpeakWebParser
         public string Text { get; set; }
 
         [ForeignKey("WebPage")]
-        public int WebPageId { get; set; }
+        public int WebPageId { get; set; }      
         public virtual WebPage WebPage { get; set; }
     }
 

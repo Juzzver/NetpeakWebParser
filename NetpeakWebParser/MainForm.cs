@@ -16,9 +16,11 @@ namespace NetpeakWebParser
 {
     public partial class MainForm : Form
     {
-        WebPageContext db;
-        WebPage m_Page;
-
+        private WebPageContext db;
+        private WebPage m_Page;
+        private string[] m_ColumnNames = { "Id", "Url", "Title", "Description",
+            "StatusCode", "ResponseTime", "h1", "Images", "AHREF_Inner",  "AHREF_Outer" };
+                                               
         public MainForm()
         {
             InitializeComponent();
@@ -29,7 +31,7 @@ namespace NetpeakWebParser
 
         private async void StartParsingButton_Click(object sender, EventArgs e)
         {
-            var url = GetUrl(UrlTextBox.Text);
+            var url = GetUrl(UrlTextBox.Text);            
 
             if (url == null)
                 return;
@@ -55,7 +57,7 @@ namespace NetpeakWebParser
             m_Page.Url = url;
             m_Page.Title = htmlDoc.DocumentNode.SelectSingleNode("//title")?.InnerHtml;
             m_Page.Description = htmlDoc.DocumentNode.SelectSingleNode("//meta[@name='description']")?.Attributes["content"].Value;
-            m_Page.ResponseCode = (int)response.StatusCode;
+            m_Page.StatusCode = (int)response.StatusCode;
             m_Page.ResponseTime = timeTaken.TotalMilliseconds.ToString("#") + " ms";
             m_Page.HeadersList = new List<Header>();
             m_Page.ImagesList = new List<Image>();
@@ -94,7 +96,7 @@ namespace NetpeakWebParser
                     if (href.Attributes["href"] != null && href.Attributes["href"].Value != null)
                     {
 
-                        if (href.Attributes["href"].Value.Contains(GetRemovedProtocolUrl(m_Page.Url)))
+                        if (href.Attributes["href"].Value.Contains(GetCleanedUrl(m_Page.Url)) || href.Attributes["href"].Value[0].Equals('/'))
                         {
                             m_Page.InnerLinksList.Add(new HrefInner()
                             {
@@ -117,7 +119,7 @@ namespace NetpeakWebParser
             ResponseDataGridView.Rows[0].Cells["Url"].Value = m_Page.Url;
             ResponseDataGridView.Rows[0].Cells["Title"].Value = m_Page.Title;
             ResponseDataGridView.Rows[0].Cells["Description"].Value = m_Page.Description;
-            ResponseDataGridView.Rows[0].Cells["StatusCode"].Value = m_Page.ResponseCode;
+            ResponseDataGridView.Rows[0].Cells["StatusCode"].Value = m_Page.StatusCode;
             ResponseDataGridView.Rows[0].Cells["ResponseTime"].Value = m_Page.ResponseTime;
             ResponseDataGridView.Rows[0].Cells["h1"].Value = m_Page.HeadersList.Count;
             ResponseDataGridView.Rows[0].Cells["Image"].Value = m_Page.ImagesList.Count;
@@ -130,16 +132,16 @@ namespace NetpeakWebParser
                 ResponseDataGridView.Rows[0].Cells["Image"].ToolTipText += $"[{i}] {((List<Image>)m_Page.ImagesList)[i].Src}\n";
             for (int i = 0; i < m_Page.InnerLinksList.Count; i++)
                 ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].ToolTipText +=
-                    $"[{i}] [{((List<HrefInner>)m_Page.InnerLinksList)[i].Link}] [{((List<HrefInner>)m_Page.InnerLinksList)[i].Text}] \n";
+                    $"[{i}] [{((List<HrefInner>)m_Page.InnerLinksList)[i].Link}] [{((List<HrefInner>)m_Page.InnerLinksList)[i].Text}]\n";
 
             for (int i = 0; i < m_Page.OuterLinksList.Count; i++)
                 ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].ToolTipText +=
-                    $"[{i}] [{((List<HrefOuter>)m_Page.OuterLinksList)[i].Link}] [{((List<HrefOuter>)m_Page.OuterLinksList)[i].Text}] \n";
+                    $"[{i}] [{((List<HrefOuter>)m_Page.OuterLinksList)[i].Link}] [{((List<HrefOuter>)m_Page.OuterLinksList)[i].Text}]\n";
 
             
         }
 
-        private string GetRemovedProtocolUrl(string url)
+        private string GetCleanedUrl(string url)
         {
             if (url.Contains("http://"))
                 url = url.Replace("http://", "");
@@ -148,6 +150,9 @@ namespace NetpeakWebParser
 
             if (url.Contains("www."))
                 url = url.Replace("www.", "");
+
+            if (url.Contains("/"))
+                url = url.Replace("/", "");
 
             return url;
         }
@@ -174,14 +179,13 @@ namespace NetpeakWebParser
                 MessageBox.Show("You may enter URL address!", "URL not found");
                 UrlTextBox.Focus();
                 UrlTextBox.BackColor = Color.PaleVioletRed;
-
                 return null;
             }
 
             if (!url.Contains("http://") && !url.Contains("https://"))
                 url = "http://" + url;
 
-            return url;
+            return url.Trim();
         }
 
         private WebRequest CreateWebRequest(string url, string method)
@@ -234,6 +238,23 @@ namespace NetpeakWebParser
             }
             else
                 MessageBox.Show("No Data for saving!", "Saving Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private void LoadDataButton_Click(object sender, EventArgs e)
+        {
+            string[] columnNames = new string[ResponseDataGridView.Columns.Count + 1];
+
+            for (int i = 0;i< ResponseDataGridView.Columns.Count; i++)
+            {
+                columnNames[i] = ResponseDataGridView.Columns[i].Name;
+            }
+
+            /*  foreach (HtmlElement elem in webBrowser1.Document.Links)
+              {
+                  var link = (elem.DomElement as HTMLAnchorElement).href;
+              }*/
+
+
         }
     }
 }

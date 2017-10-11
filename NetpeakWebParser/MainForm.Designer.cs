@@ -42,6 +42,7 @@
             this.AHREF_Inner = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.AHREF_Outer = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.SaveDataButton = new System.Windows.Forms.Button();
+            this.LoadDataButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.ResponseDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
@@ -152,13 +153,23 @@
             // 
             // SaveDataButton
             // 
-            this.SaveDataButton.Location = new System.Drawing.Point(380, 194);
+            this.SaveDataButton.Location = new System.Drawing.Point(333, 194);
             this.SaveDataButton.Name = "SaveDataButton";
             this.SaveDataButton.Size = new System.Drawing.Size(75, 23);
             this.SaveDataButton.TabIndex = 4;
             this.SaveDataButton.Text = "Save Data";
             this.SaveDataButton.UseVisualStyleBackColor = true;
             this.SaveDataButton.Click += new System.EventHandler(this.SaveDataButton_Click);
+            // 
+            // LoadDataButton
+            // 
+            this.LoadDataButton.Location = new System.Drawing.Point(414, 194);
+            this.LoadDataButton.Name = "LoadDataButton";
+            this.LoadDataButton.Size = new System.Drawing.Size(75, 23);
+            this.LoadDataButton.TabIndex = 5;
+            this.LoadDataButton.Text = "Load Data";
+            this.LoadDataButton.UseVisualStyleBackColor = true;
+            this.LoadDataButton.Click += new System.EventHandler(this.LoadDataButton_Click);
             // 
             // MainForm
             // 
@@ -167,6 +178,7 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.ClientSize = new System.Drawing.Size(818, 229);
+            this.Controls.Add(this.LoadDataButton);
             this.Controls.Add(this.SaveDataButton);
             this.Controls.Add(this.ResponseDataGridView);
             this.Controls.Add(this.StartParsingButton);
@@ -194,6 +206,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Image;
         private System.Windows.Forms.DataGridViewTextBoxColumn AHREF_Inner;
         private System.Windows.Forms.DataGridViewTextBoxColumn AHREF_Outer;
+        private System.Windows.Forms.Button LoadDataButton;
     }
 }
 
