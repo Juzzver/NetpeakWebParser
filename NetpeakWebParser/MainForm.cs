@@ -16,8 +16,6 @@ namespace NetpeakWebParser
     {
         private WebPageContext db;
         private WebPage m_Page;
-        private string[] m_ColumnNames = { "Id", "Url", "Title", "Description",
-            "StatusCode", "ResponseTime", "h1", "Images", "AHREF_Inner",  "AHREF_Outer" };
                                                
         public MainForm()
         {
@@ -123,6 +121,22 @@ namespace NetpeakWebParser
             ResponseDataGridView.Rows[0].Cells["Image"].Value = m_Page.ImagesList.Count;
             ResponseDataGridView.Rows[0].Cells["AHREF_Inner"].Value = m_Page.InnerLinksList.Count;
             ResponseDataGridView.Rows[0].Cells["AHREF_Outer"].Value = m_Page.OuterLinksList.Count;
+
+            if (/*String.IsNullOrEmpty(.ToString())*/ ResponseDataGridView.Rows[0].Cells["Description"].Value == null)
+            {
+                ResponseDataGridView.Rows[0].Cells["Description"].Style = new DataGridViewCellStyle() { BackColor = Color.Red };
+                ResponseDataGridView.Rows[0].Cells["Description"].ToolTipText = "Error: Empty description tag";
+
+                ToolTip tip = new ToolTip();
+                tip.IsBalloon = true;
+                tip.ToolTipTitle = "Description Error";
+                tip.ToolTipIcon = ToolTipIcon.Error;
+                tip.Show("Description tag is empty.", this, 224, 26);
+                Timer t = new Timer();
+                t.Interval = 2000;
+                t.Start();
+                t.Tick += delegate { tip.Hide(this); };
+            }
 
             for (int i = 0; i < m_Page.HeadersList.Count; i++)
                 ResponseDataGridView.Rows[0].Cells["h1"].ToolTipText += $"[{i}] {((List<Header>)m_Page.HeadersList)[i].Text}\n";
